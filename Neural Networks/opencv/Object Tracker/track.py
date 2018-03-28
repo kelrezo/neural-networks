@@ -12,8 +12,8 @@ class Tracker(Object):
 		color = np.uint8([[[color]]])
 		hsv = cv2.cvtColor(color,cv2.COLOR_BGR2HSV)
 		self.upper =  np.array([hsv[0] + 10, hsv[1] + 10, hsv[2] + 40])
-        self.lower =  np.array([hsv[0] - 10, hsv[1] - 10, hsv[2] - 40])
-        self.pts = []
+    self.lower =  np.array([hsv[0] - 10, hsv[1] - 10, hsv[2] - 40])
+    self.pts = []
 	def track(self):
 
 		# construct the argument parse and parse the arguments

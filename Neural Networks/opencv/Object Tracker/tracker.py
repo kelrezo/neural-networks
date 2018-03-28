@@ -4,6 +4,20 @@ import numpy as np
 import argparse
 import imutils
 import cv2
+global image_hsv, pixel
+
+#event handler for left mouse click
+def pick_color(event,x,y,flags,c):
+		if event == cv2.EVENT_LBUTTONDOWN:
+			pixel = image_hsv[y,x]
+			#you might want to adjust the ranges(+-10, etc):
+			upper =  np.array([pixel[0] + 10, pixel[1] + 10, pixel[2] + 40])
+			lower =  np.array([pixel[0] - 10, pixel[1] - 10, pixel[2] - 40])
+			#print(pixel)
+			print(lower,pixel, upper)
+			print("\n************** *************************\n")
+			image_mask = cv2.inRange(image_hsv,lower,upper)
+			cv2.imshow("mask",image_mask)
 
 # construct the argument parse and parse the arguments
 ap = argparse.ArgumentParser()
@@ -23,9 +37,9 @@ upper =(185,165,150)
 #honeylid
 lower = (12,126,136)
 upper =(32,146,220)
-
-#lower = (151,167,74)
-#upper = (171,196,180)
+#fidget spinner
+lower = (105,200,60)
+upper = (125,220,140)
 
 # initialize the list of tracked points, the frame counter,
 # and the coordinate deltas
@@ -47,7 +61,15 @@ else:
 while True:
 	# grab the current frame
 	(grabbed, frame) = camera.read()
+	
+	
+	#cv2.namedWindow('hsv')
+	#cv2.setMouseCallback('hsv', pick_color)
 
+  # now click into the hsv img , and look at values:
+	image_hsv = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
+	
+	
 	# if we are viewing a video and we did not grab a frame,
 	# then we have reached the end of the video
 	if args.get("video") and not grabbed:
@@ -92,6 +114,7 @@ while True:
 
 	# loop over the set of tracked points
 	for i in np.arange(1, len(pts)):
+		print(pts[i])
 		# if either of the tracked points are None, ignore
 		# them
 		if pts[i - 1] is None or pts[i] is None:
