@@ -3,7 +3,7 @@ import numpy as np
 
 image_hsv = None   # global ;(
 pixel = (20,60,80) # some stupid default
-avg = np.array([[],[]])
+avg = np.array([[0,0,0],[0,0,0]])
 # mouse callback function
 def pick_color(event,x,y,flags,c):
     global avg
@@ -50,6 +50,7 @@ def main():
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 
+	  print(avg)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
