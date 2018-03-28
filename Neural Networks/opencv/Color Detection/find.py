@@ -3,23 +3,29 @@ import numpy as np
 
 image_hsv = None   # global ;(
 pixel = (20,60,80) # some stupid default
-
+avg = np.array([[],[]])
 # mouse callback function
-def pick_color(event,x,y,flags,param):
+def pick_color(event,x,y,flags,c):
+    global avg
     if event == cv2.EVENT_LBUTTONDOWN:
         pixel = image_hsv[y,x]
 
         #you might want to adjust the ranges(+-10, etc):
         upper =  np.array([pixel[0] + 10, pixel[1] + 10, pixel[2] + 40])
         lower =  np.array([pixel[0] - 10, pixel[1] - 10, pixel[2] - 40])
-        print(pixel, lower, upper)
-
+        #print(lower,pixel, upper)
+        avgl = (avg[0]+lower)/2
+        avgu = (avg[1]+upper)/2
+        avg = np.array([avgl,avgu],dtype ='int64')
+        #avg = np.append([pair],avg,axis=0)
+        print(avg)
+        print("\n***************************************\n")
         image_mask = cv2.inRange(image_hsv,lower,upper)
         cv2.imshow("mask",image_mask)
 
 def main():
     import sys
-    global image_hsv, pixel # so we can use it in mouse callback
+    global image_hsv, pixel,avg # so we can use it in mouse callback
 
     cap = cv2.VideoCapture(0)
     '''
@@ -31,7 +37,7 @@ def main():
     '''
     while True:
         ret, frame = cap.read()
-        cv2.imshow("video",frame)
+        #cv2.imshow("video",frame)
 
         ## NEW ##
         cv2.namedWindow('hsv')
