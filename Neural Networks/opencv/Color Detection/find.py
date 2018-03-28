@@ -6,7 +6,7 @@ pixel = (20,60,80) # some stupid default
 avg = np.array([[0,0,0],[0,0,0]])
 c=0
 # mouse callback function
-def pick_color(event,x,y,flags,c):
+def pick_color(event,x,y,flags):
     global avg,c
     if event == cv2.EVENT_LBUTTONDOWN:
         pixel = image_hsv[y,x]
@@ -17,11 +17,11 @@ def pick_color(event,x,y,flags,c):
         #print(lower,pixel, upper)
         avgl = (avg[0]+lower)
         avgu = (avg[1]+upper)
-				c+=1
+	      c+=1
         avg = np.array([avgl,avgu],dtype ='int64')
         #avg = np.append([pair],avg,axis=0)
         print(avg)
-        print("\n***************************************\n")
+        print("\n************** *************************\n")
         image_mask = cv2.inRange(image_hsv,lower,upper)
         cv2.imshow("mask",image_mask)
 
