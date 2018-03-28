@@ -4,9 +4,10 @@ import numpy as np
 image_hsv = None   # global ;(
 pixel = (20,60,80) # some stupid default
 avg = np.array([[0,0,0],[0,0,0]])
+c=0
 # mouse callback function
 def pick_color(event,x,y,flags,c):
-    global avg
+    global avg,c
     if event == cv2.EVENT_LBUTTONDOWN:
         pixel = image_hsv[y,x]
 
@@ -14,8 +15,9 @@ def pick_color(event,x,y,flags,c):
         upper =  np.array([pixel[0] + 10, pixel[1] + 10, pixel[2] + 40])
         lower =  np.array([pixel[0] - 10, pixel[1] - 10, pixel[2] - 40])
         #print(lower,pixel, upper)
-        avgl = (avg[0]+lower)/2
-        avgu = (avg[1]+upper)/2
+        avgl = (avg[0]+lower)
+        avgu = (avg[1]+upper)
+				c+=1
         avg = np.array([avgl,avgu],dtype ='int64')
         #avg = np.append([pair],avg,axis=0)
         print(avg)
@@ -25,7 +27,7 @@ def pick_color(event,x,y,flags,c):
 
 def main():
     import sys
-    global image_hsv, pixel,avg # so we can use it in mouse callback
+    global image_hsv, pixel,avg,c # so we can use it in mouse callback
 
     cap = cv2.VideoCapture(0)
     '''
@@ -48,11 +50,11 @@ def main():
         cv2.imshow("hsv",image_hsv)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
-	  print(avg)
+          break
+	  
     cv2.waitKey(0)
     cv2.destroyAllWindows()
+    print('lower',avg[0]/c,"\n",'upper',avg[1]/c)
 
 if __name__=='__main__':
     main()
